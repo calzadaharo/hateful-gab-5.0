@@ -1,0 +1,7 @@
+# Ignore raphtory.jar file
+**/raphtory-pulsar-assembly-0.1.jar
+
+# Ignore directories
+.bsp/
+.idea/
+target/
