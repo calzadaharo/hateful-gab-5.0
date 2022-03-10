@@ -9,6 +9,8 @@ lazy val root = (project in file("."))
     name := "hateful-gab-5.0"
   )
 
+logLevel:=Level.Debug
+
 // SBT already finds jars jars present in the "lib" directory. However it is always best to express unmanaged dependencies explicitly.
 // It eliminates scope of any assumptions and documents the dependencies right here in the "build.sbt" file.
 Compile / unmanagedJars += baseDirectory.value / "lib/raphtory-pulsar-assembly-0.1.jar"
