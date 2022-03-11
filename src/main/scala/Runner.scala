@@ -14,6 +14,6 @@ object Runner extends App {
   val graph = Raphtory.createGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
-  val queryHandler = graph.pointQuery(GraphDepthIndex(), outputServer, 3062658)
+  val queryHandler = graph.pointQuery(GraphDepthIndex(), outputServer, lastTimestamp)
   queryHandler.waitForJob()
 }
