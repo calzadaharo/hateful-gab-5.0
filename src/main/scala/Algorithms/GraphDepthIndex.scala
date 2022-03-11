@@ -6,7 +6,8 @@ class GraphDepthIndex() extends GraphAlgorithm  {
   override def apply(graph: GraphPerspective): GraphPerspective = {
     graph
       .step(vertex => {
-        if (vertex.getPropertyOrElse("type", null) == "original") {
+        if (vertex.getPropertyOrElse("type", null) == "original" &&
+          vertex.getAllNeighbours().nonEmpty) {
           vertex.setState("cascade", vertex.ID)
           vertex.setState("level",0)
           vertex.setState("index", 0)
@@ -58,9 +59,6 @@ class GraphDepthIndex() extends GraphAlgorithm  {
 
   override def tabularise(graph: GraphPerspective): Table = {
     graph
-      .filter(vertex =>
-        vertex.getAllNeighbours().isEmpty
-      )
       .select(vertex =>
         Row(
           vertex.ID(),
@@ -71,6 +69,7 @@ class GraphDepthIndex() extends GraphAlgorithm  {
           vertex.getPropertyOrElse("user",null)
         )
       )
+      .filter(row => row.get(3) != null)
   }
 }
 
