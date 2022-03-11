@@ -4,10 +4,6 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.7"
 
-libraryDependencies += "org.apache.hadoop" % "hadoop-hdfs" % "3.3.1"
-libraryDependencies += "org.apache.hadoop" % "hadoop-common" % "3.3.1"
-
-
 lazy val root = (project in file("."))
   .settings(
     name := "hateful-gab-5.0"
