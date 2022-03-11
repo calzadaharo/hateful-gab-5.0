@@ -13,6 +13,7 @@ object Runner extends App {
   val builder = new FirstAnalysisGB()
   val graph = Raphtory.createGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
-  val queryHandler = graph.pointQuery(GraphDepthIndex(), output, lastTimestampPart0)
+  val outputServer = FileOutputFormat("/home/rcalzada/output")
+  val queryHandler = graph.pointQuery(GraphDepthIndex(), outputServer, lastTimestampPart0)
   queryHandler.waitForJob()
 }
