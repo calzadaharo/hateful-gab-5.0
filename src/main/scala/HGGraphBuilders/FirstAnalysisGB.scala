@@ -30,7 +30,8 @@ class FirstAnalysisGB extends GraphBuilder[String]{
           ImmutableProperty("timestamp",timeString),
           ImmutableProperty("user",user),
           ImmutableProperty("hateful",hateful),
-          ImmutableProperty("type","answer")),
+          ImmutableProperty("type","answer"),
+          ImmutableProperty("parent",parent.toString)),
         Type("Post")
       )
       addVertex(timestamp, parent, Type("Post"))
@@ -41,7 +42,8 @@ class FirstAnalysisGB extends GraphBuilder[String]{
           ImmutableProperty("timestamp",timeString),
           ImmutableProperty("user",user),
           ImmutableProperty("hateful",hateful),
-          ImmutableProperty("type","initial")),
+          ImmutableProperty("type","initial"),
+          ImmutableProperty("parent",initial.toString)),
         Type("Post")
       )
       addVertex(timestamp, initial, Type("Post"))

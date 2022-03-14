@@ -8,7 +8,6 @@ class GraphDepthIndex() extends GraphAlgorithm  {
       .step(vertex => {
         if (vertex.getPropertyOrElse("type", null) == "original" &&
           vertex.getAllNeighbours().nonEmpty) {
-          vertex.setState("cascade", vertex.ID)
           vertex.setState("level",0)
           vertex.setState("index", 0)
           val timestamp = vertex.getPropertyOrElse("timestamp","0").toLong
@@ -32,7 +31,6 @@ class GraphDepthIndex() extends GraphAlgorithm  {
           if (flag) {
             // Check if the message was born in the original
             if (cascade != 0) {
-              vertex.setState("cascade",cascade)
               vertex.setState("level",level)
               vertex.setState("index",index)
               vertex.messageInNeighbours(cascade,timestamp,level,true)
@@ -62,6 +60,7 @@ class GraphDepthIndex() extends GraphAlgorithm  {
       .select(vertex =>
         Row(
           vertex.ID(),
+          vertex.getPropertyOrElse("parent",null),
           vertex.getPropertyOrElse("timestamp",null),
           vertex.getStateOrElse("index",null),
           vertex.getStateOrElse("level",null),
@@ -69,7 +68,7 @@ class GraphDepthIndex() extends GraphAlgorithm  {
           vertex.getPropertyOrElse("user",null)
         )
       )
-      .filter(row => row.get(3) != null)
+      .filter(row => row.get(4) != null)
   }
 }
 
