@@ -16,6 +16,7 @@ class ViralityAnalysisGB extends GraphBuilder[String]{
     val user = dataLine(1)
 
     addVertex(index,vertex,Properties(
+      ImmutableProperty("index",index.toString),
       ImmutableProperty("level",level),
       ImmutableProperty("hateful", hateful),
       ImmutableProperty("user", user)
