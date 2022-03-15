@@ -9,11 +9,11 @@ object Runner extends App {
   val lastTimestampPart0: Long = 3062658
   val lastTimestamp: Long = 46417964
 
-  val source = ResourceSpout("hateful_gab.csv")
+  val source = ResourceSpout("part-00000-hateful_gab.csv")
   val builder = new FirstAnalysisGB()
   val graph = Raphtory.createGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
-  val queryHandler = graph.pointQuery(GraphDepthIndex(), outputServer, lastTimestamp)
+  val queryHandler = graph.pointQuery(GraphDepthIndex(), output, firstTest)
   queryHandler.waitForJob()
 }
