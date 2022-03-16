@@ -9,62 +9,80 @@ class Virality extends GraphAlgorithm {
         val index = vertex.getPropertyOrElse("index","-1").toLong
         if (index == 0) vertex.setState("sent",2)
         if (index == 1) {
-          vertex.setState("sum", 2)
-          vertex.setState("parent_sum",0)
+          vertex.setState("sum", 2.toLong)
+          vertex.setState("parent_sum",0.toLong)
           vertex.setState("sent",2)
         } else if (index == 2) {
-          vertex.setState("sum", 3)
-          vertex.setState("parent_sum",2)
+          vertex.setState("sum", 3.toLong)
+          vertex.setState("parent_sum",2.toLong)
           vertex.setState("sent",3)
-          vertex.messageOutNeighbours(vertex.ID(),(index+1).toLong,1.toLong,3.toLong)
+          vertex.messageAllNeighbours(0.toLong,index+1,0.toLong,3.toLong, false)
         }
       })
       .iterate({vertex =>
-        val messages = vertex.messageQueue[(Long,Long,Long,Long)]
+        val messages = vertex.messageQueue[(Long,Long,Long,Long,Boolean)]
         messages.foreach( message => {
           val received_id = message._1
           val received_index = message._2
           val distance = message._3
           val parent_sum = message._4
+          val direct = message._5
 
           val my_index = vertex.getPropertyOrElse("index","-1").toLong
-          val my_sent = vertex.getStateOrElse("sent","-1").toLong
+          val my_sent = vertex.getStateOrElse("sent",0)
+          val my_new_sent = vertex.getStateOrElse("new_sent",0)
 
           // Check if I am the main vertex
           if (my_index == received_index) {
-            // Check if it comes from an specific vertex
-            if (received_index == 0) {
-              val my_new_storage = vertex.getStateOrElse("storage","-1").toLong + 1
-              val my_new_sum = vertex.getStateOrElse("sum","-1").toLong + distance
-              vertex.setState("sum",my_new_sum)
-              // Check if I have received all previous posts
-              if (my_new_storage == my_index) {
-                vertex.messageAllNeighbours(0.toLong, my_index + 1, 0.toLong, my_new_sum)
-              } else {
-                vertex.setState("storage",my_new_storage)
+            // Check if it comes from a new vertex
+            if (parent_sum != 0 && vertex.getStateOrElse("parent_sum",0.toLong) == 0) {
+              println("CAMINO 1")
+              vertex.setState("sum", 0.toLong)
+              vertex.setState("parent_sum", parent_sum)
+              vertex.setState("storage", 0)
+              vertex.messageOutNeighbours(vertex.ID(), my_index, 1.toLong, 0.toLong, false)
+            } else {
+              println("CAMINO X")
+              // Check if it comes from an specific vertex
+              if (direct) {
+                println("CAMINO Y")
+                val my_new_storage = vertex.getStateOrElse("storage",0) + 1
+                val sum: Long = vertex.getState("sum")
+                val my_new_sum = sum + distance
+                vertex.setState("sum",my_new_sum)
+                // Check if I have received all previous posts
+                if (my_new_storage == my_index - 1) {
+                  println("CAMINO 2")
+                  vertex.setState("new_sent",my_index.toInt+1)
+                  val total_sum = 2*my_new_sum + vertex.getStateOrElse("parent_sum",0.toLong)
+                  vertex.setState("sum",total_sum)
+                  vertex.messageAllNeighbours(0.toLong, my_index + 1, 0.toLong, total_sum, false)
+                } else {
+                  println("CAMINO 3")
+                  vertex.setState("storage",my_new_storage)
+                }
               }
             }
           } else {
-            // Check if it comes from a new vertex
-            if (parent_sum != 0) {
-              // Check if I am the new vertex
-              if (my_index == received_index) {
-                vertex.setState("sum",0)
-                vertex.setState("parent_sum",parent_sum)
-                vertex.setState("storage",0)
-                vertex.messageOutNeighbours(vertex.ID(),my_index,1.toLong,0.toLong)
+            if (parent_sum != 0.toLong) {
+              println("CAMINO 4")
+              if (my_new_sent < received_index) {
+                println("CAMINO 5")
+                vertex.setState("new_sent",received_index.toInt)
+                vertex.messageAllNeighbours(received_id,received_index,distance,parent_sum,false)
               }
-              // Not a new vertex
             } else {
-              // Check if I am previous to the sender message
-              if (received_index < my_index) {
-                // Check if I had already been considered
-                if (received_index < my_sent) {
-                  vertex.setState("index",received_index)
-                  vertex.messageVertex(received_id, (received_id, 0.toLong, distance, parent_sum))
-                  vertex.messageAllNeighbours(received_id,received_index,distance+1,parent_sum)
-                }
+              // Check if I am previous to the sender message and if I had already been considered
+              if (received_index > my_index && received_index > my_sent) {
+                // Check
+                  println("CAMINO 6")
+                  vertex.setState("sent",received_index.toInt)
+                  vertex.messageVertex(received_id,
+                    (received_id, received_index, distance, parent_sum,true))
+                  vertex.messageAllNeighbours(received_id,received_index,distance+1,parent_sum,false)
+                println("DISTANCE =" + distance +" VERTEX = " + my_index)
               }
+              println("CAMINO 8")
             }
           }
         })
@@ -75,6 +93,7 @@ class Virality extends GraphAlgorithm {
       .select(vertex => {
         Row(
           vertex.getPropertyOrElse("cascade",null),
+          vertex.getPropertyOrElse("index", null),
           vertex.getPropertyOrElse("level", null),
           vertex.getStateOrElse("sum",null),
           vertex.getStateOrElse("parent_sum",null)

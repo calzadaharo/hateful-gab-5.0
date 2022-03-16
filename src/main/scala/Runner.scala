@@ -9,11 +9,11 @@ object Runner extends App {
   val lastTimestampPart0: Long = 3062658
   val lastTimestamp: Long = 46417964
 
-  val source = ResourceSpout("pre-virality-sample.csv")
+  val source = ResourceSpout("one-cascade-sample.csv")
   val builder = new ViralityAnalysisGB()
   val graph = Raphtory.createGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
-  val queryHandler = graph.pointQuery(Virality(), output, firstTest)
+  val queryHandler = graph.pointQuery(Virality(), output, 9)
   queryHandler.waitForJob()
 }
