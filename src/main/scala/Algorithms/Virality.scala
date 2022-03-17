@@ -13,9 +13,8 @@ class Virality extends GraphAlgorithm {
           vertex.setState("parent_sum",0.toLong)
           vertex.setState("sent",2)
         } else if (index == 2) {
-          vertex.setState("sum", 3.toLong)
+          vertex.setState("sum", 8.toLong)
           vertex.setState("parent_sum",2.toLong)
-          vertex.setState("sent",3)
           vertex.messageAllNeighbours(0.toLong,index+1,0.toLong,3.toLong, false)
         }
       })
@@ -51,11 +50,12 @@ class Virality extends GraphAlgorithm {
                 val my_new_sum = sum + distance
                 vertex.setState("sum",my_new_sum)
                 // Check if I have received all previous posts
-                if (my_new_storage == my_index - 1) {
+                if (my_new_storage == my_index) {
                   println("CAMINO 2")
                   vertex.setState("new_sent",my_index.toInt+1)
                   val total_sum = 2*my_new_sum + vertex.getStateOrElse("parent_sum",0.toLong)
                   vertex.setState("sum",total_sum)
+                  println("TOTAL SUM -> "+total_sum)
                   vertex.messageAllNeighbours(0.toLong, my_index + 1, 0.toLong, total_sum, false)
                 } else {
                   println("CAMINO 3")
@@ -75,11 +75,11 @@ class Virality extends GraphAlgorithm {
               // Check if I am previous to the sender message and if I had already been considered
               if (received_index > my_index && received_index > my_sent) {
                 // Check
-                  println("CAMINO 6")
-                  vertex.setState("sent",received_index.toInt)
-                  vertex.messageVertex(received_id,
-                    (received_id, received_index, distance, parent_sum,true))
-                  vertex.messageAllNeighbours(received_id,received_index,distance+1,parent_sum,false)
+                println("CAMINO 6")
+                vertex.setState("sent",received_index.toInt)
+                vertex.messageVertex(received_id,
+                  (received_id, received_index, distance, parent_sum,true))
+                vertex.messageAllNeighbours(received_id,received_index,distance+1,parent_sum,false)
                 println("DISTANCE =" + distance +" VERTEX = " + my_index)
               }
               println("CAMINO 8")
@@ -89,14 +89,23 @@ class Virality extends GraphAlgorithm {
       }, iterations = 100000, executeMessagedOnly = true)
   }
   override def tabularise(graph: GraphPerspective): Table = {
+    def virality(index: Int, total_sum: Long): Double = index match {
+      case 0 => 1
+      case _ => 1/(index.toDouble*(index.toDouble+1))*(total_sum.toDouble)
+     }
+
     graph
       .select(vertex => {
+        val index = vertex.getPropertyOrElse("index", "-1").toInt
+        val sum = vertex.getStateOrElse("sum",0.toLong)
+        val parent_sum = vertex.getStateOrElse("parent_sum",0.toLong)
         Row(
           vertex.getPropertyOrElse("cascade",null),
-          vertex.getPropertyOrElse("index", null),
+          index,
           vertex.getPropertyOrElse("level", null),
-          vertex.getStateOrElse("sum",null),
-          vertex.getStateOrElse("parent_sum",null)
+          sum,
+          parent_sum,
+          virality(index,sum)
         )
       })
   }
