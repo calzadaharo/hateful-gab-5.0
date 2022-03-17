@@ -35,39 +35,31 @@ class Virality extends GraphAlgorithm {
           if (my_index == received_index) {
             // Check if it comes from a new vertex
             if (parent_sum != 0 && vertex.getStateOrElse("parent_sum",0.toLong) == 0) {
-              println("CAMINO 1")
               vertex.setState("sum", 0.toLong)
               vertex.setState("parent_sum", parent_sum)
               vertex.setState("storage", 0)
               vertex.messageOutNeighbours(vertex.ID(), my_index, 1.toLong, 0.toLong, false)
             } else {
-              println("CAMINO X")
               // Check if it comes from an specific vertex
               if (direct) {
-                println("CAMINO Y")
                 val my_new_storage = vertex.getStateOrElse("storage",0) + 1
                 val sum: Long = vertex.getState("sum")
                 val my_new_sum = sum + distance
                 vertex.setState("sum",my_new_sum)
                 // Check if I have received all previous posts
                 if (my_new_storage == my_index) {
-                  println("CAMINO 2")
                   vertex.setState("new_sent",my_index.toInt+1)
                   val total_sum = 2*my_new_sum + vertex.getStateOrElse("parent_sum",0.toLong)
                   vertex.setState("sum",total_sum)
-                  println("TOTAL SUM -> "+total_sum)
                   vertex.messageAllNeighbours(0.toLong, my_index + 1, 0.toLong, total_sum, false)
                 } else {
-                  println("CAMINO 3")
                   vertex.setState("storage",my_new_storage)
                 }
               }
             }
           } else {
             if (parent_sum != 0.toLong) {
-              println("CAMINO 4")
               if (my_new_sent < received_index) {
-                println("CAMINO 5")
                 vertex.setState("new_sent",received_index.toInt)
                 vertex.messageAllNeighbours(received_id,received_index,distance,parent_sum,false)
               }
@@ -75,14 +67,11 @@ class Virality extends GraphAlgorithm {
               // Check if I am previous to the sender message and if I had already been considered
               if (received_index > my_index && received_index > my_sent) {
                 // Check
-                println("CAMINO 6")
                 vertex.setState("sent",received_index.toInt)
                 vertex.messageVertex(received_id,
                   (received_id, received_index, distance, parent_sum,true))
                 vertex.messageAllNeighbours(received_id,received_index,distance+1,parent_sum,false)
-                println("DISTANCE =" + distance +" VERTEX = " + my_index)
               }
-              println("CAMINO 8")
             }
           }
         })
