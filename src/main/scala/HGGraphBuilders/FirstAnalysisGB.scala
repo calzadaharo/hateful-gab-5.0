@@ -1,7 +1,7 @@
 package HGGraphBuilders
 
-import com.raphtory.core.components.graphbuilder.GraphBuilder
-import com.raphtory.core.components.graphbuilder.{ImmutableProperty, Properties, Type}
+import com.raphtory.core.components.graphbuilder.{GraphBuilder, Properties, ImmutableProperty, Type}
+//import com.raphtory.core.model.graph.{ImmutableProperty, Properties, Type}
 
 class FirstAnalysisGB extends GraphBuilder[String]{
   override def parseTuple(tuple: String): Unit = {

@@ -1,7 +1,7 @@
 package HGGraphBuilders
 
-import com.raphtory.core.components.graphbuilder.GraphBuilder
-import com.raphtory.core.components.graphbuilder.{ImmutableProperty, Properties, Type}
+import com.raphtory.core.components.graphbuilder.{GraphBuilder, Properties, ImmutableProperty}
+//import com.raphtory.core.model.graph.{ImmutableProperty, Properties, Type}
 
 class ViralityAnalysisGB extends GraphBuilder[String]{
   override def parseTuple(tuple: String): Unit = {
@@ -21,7 +21,6 @@ class ViralityAnalysisGB extends GraphBuilder[String]{
         ImmutableProperty("cascade",cascade),
         ImmutableProperty("level",level),
         ImmutableProperty("hateful", hateful),
-        ImmutableProperty("user", user)
       ))
       if (level != "0") {addEdge(index, vertex, parent.toLong)}
   }

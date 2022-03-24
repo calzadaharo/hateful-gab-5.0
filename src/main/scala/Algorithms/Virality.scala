@@ -20,7 +20,9 @@ class Virality extends GraphAlgorithm {
       })
       .iterate({vertex =>
         val messages = vertex.messageQueue[(Long,Long,Long,Long,Boolean)]
+        println(messages)
         messages.foreach( message => {
+          println(message)
           val received_id = message._1
           val received_index = message._2
           val distance = message._3
