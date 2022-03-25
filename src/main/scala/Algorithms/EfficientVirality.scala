@@ -42,11 +42,11 @@ class EfficientVirality  extends GraphAlgorithm {
         println("ITERATE")
         val messages = vertex.messageQueue[(Any)]
         println("Message: " + messages)
-        messages.foreach(message => message match {
-          case m: String => println("STRING")
-          case m: Long => println("LONG")
-          case m: Int => println("INT")
-          case _ => println("Kuma")
+        messages.foreach(_ match {
+          case m: String => println(s"STRING: $m")
+          case m: Long => println(s"LONG: $m")
+          case m: Int => println(s"INT: $m")
+          case _ => println("TAKE A LOOK!")
         })
       }, iterations = 100000, executeMessagedOnly = true)
   }
