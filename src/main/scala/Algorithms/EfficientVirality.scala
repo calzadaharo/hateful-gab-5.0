@@ -9,62 +9,74 @@ import com.raphtory.core.graph.visitor.Vertex
 class EfficientVirality  extends GraphAlgorithm {
   override def apply(graph: GraphPerspective): GraphPerspective = {
     graph
-      .setGlobalState({ globalState: GraphState =>
-        println("SET GLOBAL STATE")
-        globalState.newAdder[Int]("generalIndex", retainState = true)
-      })
-      .step{(vertex: Vertex ,globalState: GraphState) => {
-        println("STEP")
+      .step{(vertex: Vertex) => {
+        println(s"STEP")
         vertex.getProperty[String]("index") match {
           case Some(i) => {i match {
             case "0" => {
-              vertex.setState("contribution",1.toLong)
+              vertex.setState("contribution",1)
               vertex.setState("sum",0.toLong)
               vertex.setState("index",1)
             }
             case "1" => {
-              vertex.setState("contribution",1.toLong)
+              vertex.setState("contribution",1)
               vertex.setState("sum",2.toLong)
               vertex.setState("index",1)
             }
             case "2" => {
 //              vertex.setState("index",vertex.getProperty[Int]("index"))
-              vertex.messageOutNeighbours(vertex.ID().toString)
+              vertex.messageOutNeighbours(SendMeParent(vertex.ID(),2))
             }
             case _ => {
-//              vertex.setState("index",vertex.getProperty[Int]("index"))
+              vertex.setState("index",0)
+              vertex.setState("contribution",0)
             }
           }}
           case None => logger.error("ERROR")
         }
       }}
-      .iterate({(vertex:Vertex, globalState: GraphState) =>
+      .iterate({(vertex:Vertex) =>
         println("ITERATE")
-        val messages = vertex.messageQueue[(Any)]
-//        println("Message: " + messages)
-        messages.foreach(_ match {
-          case m: String => {
-            val contribution = vertex.getState[Long]("contribution")
-            val indexUpdated = vertex.getState[Int]("index")
-            vertex.messageVertex(m.toLong,contribution)
-            vertex.setState("contribution",contribution+1)
-            vertex.setState("index",indexUpdated+1)
-            vertex.messageAllNeighbours(2)
-          }
-          case m: Long => {
+        vertex.messageQueue[Message].foreach(_ match {
+            case SendMeParent(id, index) => {
+              val contribution = vertex.getState[Int]("contribution")
+              vertex.setState("contribution",contribution+1)
+              vertex.setState("index",index)
+              vertex.messageVertex(id,MyContribution(contribution))
+              vertex.messageAllNeighbours(UpdateDistance(2,index))
+            }
+          case MyContribution(value) => {
+            println(s"My contributrion ${value}")
             val index: String = vertex.getProperty[String]("index") match {
               case Some(i) => i
               case None => "ERROR"
             }
-            val totalSum: Long = 2*(m+index.toLong)
+            val totalSum: Long = 2*(value.toLong+index.toLong)
+            println(s"Total sum: ${totalSum}")
             vertex.setState("sum",totalSum)
             vertex.setState("index",index.toInt)
+            vertex.setState("contribution",value+index.toInt)
           }
-          case m: Int => {
-            println(s"INT: $m")
-            println(m.getClass)
+          case UpdateDistance(distance, receivedIndex) => {
+            val myIndex: String = vertex.getProperty[String]("index") match {
+              case Some(i) => i
+              case None => "ERROR"
+            }
+            val mySituation = vertex.getState[Int]("index")
+            if (receivedIndex > myIndex.toInt && receivedIndex > mySituation) {
+              val newContribution: Int = (vertex.getState[Int]("contribution")
+                + distance)
+              vertex.setState("index",receivedIndex)
+              vertex.setState("contribution",newContribution)
+              vertex.messageAllNeighbours(
+                UpdateDistance(newContribution,receivedIndex))
+            } else if (myIndex.toInt - 1 == receivedIndex) {
+              println("FOUND NEXT")
+              vertex.setState("index", myIndex.toInt)
+              vertex.messageOutNeighbours(SendMeParent(vertex.ID(),myIndex.toInt))
+            }
           }
-          case _ => println("TAKE A LOOK!")
+          case _ => println("ERROR")
         })
       }, iterations = 100000, executeMessagedOnly = true)
   }
@@ -76,6 +88,10 @@ class EfficientVirality  extends GraphAlgorithm {
           vertex.getStateOrElse("contribution", 0))
       })
   }
+  sealed trait Message {}
+  case class SendMeParent(vertexId: Long, index: Int)     extends Message
+  case class MyContribution(contribution: Int)            extends Message
+  case class UpdateDistance(newDistance: Int, index: Int) extends Message
 }
 
 object EfficientVirality {
