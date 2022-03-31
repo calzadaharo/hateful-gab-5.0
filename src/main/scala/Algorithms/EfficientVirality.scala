@@ -82,6 +82,7 @@ class EfficientVirality  extends GraphAlgorithm {
         Row(vertex.ID(),
           vertex.getPropertyOrElse("cascade","null"),
           vertex.getPropertyOrElse("index","null"),
+          vertex.getStateOrElse("contribution", 0),
           vertex.getStateOrElse("sum", 0))
       })
   }
