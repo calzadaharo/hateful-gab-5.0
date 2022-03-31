@@ -80,7 +80,9 @@ class EfficientVirality  extends GraphAlgorithm {
     graph
       .select(vertex=> {
         Row(vertex.ID(),
-          vertex.getStateOrElse("contribution", 0))
+          vertex.getPropertyOrElse("cascade","null"),
+          vertex.getPropertyOrElse("index","null"),
+          vertex.getStateOrElse("sum", 0))
       })
   }
   sealed trait Message {}
