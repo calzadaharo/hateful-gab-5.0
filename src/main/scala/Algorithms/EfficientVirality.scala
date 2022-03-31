@@ -10,7 +10,6 @@ class EfficientVirality  extends GraphAlgorithm {
   override def apply(graph: GraphPerspective): GraphPerspective = {
     graph
       .step{(vertex: Vertex) => {
-        println(s"STEP")
         vertex.getProperty[String]("index") match {
           case Some(i) => {i match {
             case "0" => {
@@ -24,7 +23,7 @@ class EfficientVirality  extends GraphAlgorithm {
               vertex.setState("index",1)
             }
             case "2" => {
-//              vertex.setState("index",vertex.getProperty[Int]("index"))
+              vertex.setState("index",i)
               vertex.messageOutNeighbours(SendMeParent(vertex.ID(),2))
             }
             case _ => {
@@ -36,7 +35,6 @@ class EfficientVirality  extends GraphAlgorithm {
         }
       }}
       .iterate({(vertex:Vertex) =>
-        println("ITERATE")
         vertex.messageQueue[Message].foreach(_ match {
             case SendMeParent(id, index) => {
               val contribution = vertex.getState[Int]("contribution")
@@ -46,13 +44,12 @@ class EfficientVirality  extends GraphAlgorithm {
               vertex.messageAllNeighbours(UpdateDistance(2,index))
             }
           case MyContribution(value) => {
-            println(s"My contributrion ${value}")
             val index: String = vertex.getProperty[String]("index") match {
               case Some(i) => i
               case None => "ERROR"
             }
             val totalSum: Long = 2*(value.toLong+index.toLong)
-            println(s"Total sum: ${totalSum}")
+            println(s"Total sum of ${index}: ${totalSum}")
             vertex.setState("sum",totalSum)
             vertex.setState("index",index.toInt)
             vertex.setState("contribution",value+index.toInt)
@@ -71,8 +68,8 @@ class EfficientVirality  extends GraphAlgorithm {
               vertex.messageAllNeighbours(
                 UpdateDistance(newContribution,receivedIndex))
             } else if (myIndex.toInt - 1 == receivedIndex) {
-              println("FOUND NEXT")
-              vertex.setState("index", myIndex.toInt)
+              println(s"FOUND NEXT: ${myIndex}")
+//              vertex.setState("index", myIndex.toInt)
               vertex.messageOutNeighbours(SendMeParent(vertex.ID(),myIndex.toInt))
             }
           }
@@ -83,7 +80,6 @@ class EfficientVirality  extends GraphAlgorithm {
   override def tabularise(graph: GraphPerspective): Table = {
     graph
       .select(vertex=> {
-        println("TABULARISE")
         Row(vertex.ID(),
           vertex.getStateOrElse("contribution", 0))
       })
