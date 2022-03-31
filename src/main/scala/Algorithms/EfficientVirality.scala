@@ -22,7 +22,8 @@ class EfficientVirality  extends GraphAlgorithm {
               vertex.setState("index",1)
             }
             case "2" => {
-              vertex.setState("index",i)
+              vertex.setState("index",0)
+              vertex.setState("contribution",0)
               vertex.messageOutNeighbours(SendMeParent(vertex.ID(),2))
             }
             case _ => {
@@ -48,10 +49,10 @@ class EfficientVirality  extends GraphAlgorithm {
               case None => "ERROR"
             }
             val totalSum: Long = 2*(value.toLong+index.toLong)
-//            println(s"Total sum of ${index}: ${totalSum}")
+//            println(s"Index: ${index},total sum: ${totalSum}")
             vertex.setState("sum",totalSum)
-            vertex.setState("index",index.toInt)
             vertex.setState("contribution",value+index.toInt)
+            vertex.messageInNeighbours(UpdateDistance(1,index.toInt))
           }
           case UpdateDistance(distance, receivedIndex) => {
             val myIndex: String = vertex.getProperty[String]("index") match {
@@ -62,13 +63,12 @@ class EfficientVirality  extends GraphAlgorithm {
             if (receivedIndex > myIndex.toInt && receivedIndex > mySituation) {
               val newContribution: Int = (vertex.getState[Int]("contribution")
                 + distance)
+//              println(s"Index: ${myIndex}, contrib: ${newContribution}")
               vertex.setState("index",receivedIndex)
               vertex.setState("contribution",newContribution)
               vertex.messageAllNeighbours(
-                UpdateDistance(newContribution,receivedIndex))
+                UpdateDistance(distance+1,receivedIndex))
             } else if (myIndex.toInt - 1 == receivedIndex) {
-//              println(s"FOUND NEXT: ${myIndex}")
-//              vertex.setState("index", myIndex.toInt)
               vertex.messageOutNeighbours(SendMeParent(vertex.ID(),myIndex.toInt))
             }
           }
