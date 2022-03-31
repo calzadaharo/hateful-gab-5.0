@@ -2,8 +2,7 @@ package Algorithms
 
 import com.raphtory.core.algorithm.GraphPerspective
 
-import com.raphtory.core.algorithm.{GraphAlgorithm,Row,Table,
-  GraphStateImplementation,GraphState}
+import com.raphtory.core.algorithm.{GraphAlgorithm,Row,Table}
 import com.raphtory.core.graph.visitor.Vertex
 
 class EfficientVirality  extends GraphAlgorithm {
