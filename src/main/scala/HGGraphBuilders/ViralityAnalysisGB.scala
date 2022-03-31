@@ -7,9 +7,9 @@ class ViralityAnalysisGB extends GraphBuilder[String]{
   override def parseTuple(tuple: String): Unit = {
     val dataLine = tuple.split(",").map(_.trim)
 
-    val vertex = dataLine(2).toLong
-    val parent = dataLine(3)
-    val cascade = dataLine(1)
+    val vertex = dataLine(1).toLong
+    val parent = dataLine(2)
+    val cascade = dataLine(3)
     //    val timestamp = dataLine(4)
     val index = dataLine(5).toLong
     val level = dataLine(6)
