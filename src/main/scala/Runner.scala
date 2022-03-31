@@ -1,4 +1,4 @@
-import Algorithms.{EfficientVirality, GraphDepthIndex, Virality, CountNodes}
+import Algorithms.{EfficientVirality, GraphDepthIndex, Virality}
 import HGGraphBuilders.{FirstAnalysisGB, ViralityAnalysisGB}
 import com.raphtory.core.deploy.Raphtory
 import com.raphtory.core.components.spout.instance.ResourceSpout
