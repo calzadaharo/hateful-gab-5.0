@@ -22,6 +22,6 @@ class ViralityAnalysisGB extends GraphBuilder[String]{
         ImmutableProperty("level",level),
         ImmutableProperty("hateful", hateful),
       ))
-      if (level != "0" || level != 0) {addEdge(index, vertex, parent.toLong)}
+      if (level != "0" && level != 0) {addEdge(index, vertex, parent.toLong)}
   }
 }
