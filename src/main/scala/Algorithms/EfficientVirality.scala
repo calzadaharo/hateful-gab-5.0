@@ -31,7 +31,7 @@ class EfficientVirality  extends GraphAlgorithm {
               vertex.setState("contribution",0)
             }
           }}
-          case None => logger.error("ERROR")
+          case None => println(s"STEP ERROR ${vertex.ID()}")
         }
       }}
       .iterate({(vertex:Vertex) =>
@@ -72,7 +72,7 @@ class EfficientVirality  extends GraphAlgorithm {
               vertex.messageOutNeighbours(SendMeParent(vertex.ID(),myIndex.toInt))
             }
           }
-          case _ => println("ERROR")
+          case _ => println(s"ITERATE ERROR: ${vertex.ID()}")
         })
       }, iterations = 100000, executeMessagedOnly = true)
   }
