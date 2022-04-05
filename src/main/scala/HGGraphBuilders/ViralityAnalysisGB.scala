@@ -11,9 +11,9 @@ class ViralityAnalysisGB extends GraphBuilder[String]{
     val parent = dataLine(2)
     val cascade = dataLine(3)
     //    val timestamp = dataLine(4)
-    val index = dataLine(4).toLong
-    val level = dataLine(5)
-    val hateful = dataLine(6)
+    val index = dataLine(5).toLong
+    val level = dataLine(6)
+    val hateful = dataLine(7)
 //    val user = dataLine(8)
 
       addVertex(index,vertex,Properties(

@@ -10,10 +10,10 @@ object Runner extends App {
   val lastTimestamp: Long = 46417964
   val maxIndex = 2692
 
-  val source = ResourceSpout("problematic_cascade.csv")
+  val source = ResourceSpout("pre-virality.csv")
   val builder = new ViralityAnalysisGB()
   val graph = Raphtory.createGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
-  val queryHandler = graph.pointQuery(EfficientVirality(), outputServer, 8)
+  val queryHandler = graph.pointQuery(EfficientVirality(), outputServer, maxIndex)
 }
