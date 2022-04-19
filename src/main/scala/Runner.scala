@@ -11,7 +11,7 @@ object Runner extends App {
   val maxIndex = 2692
 
   val source = ResourceSpout("correct-pre-virality.csv")
-  val builder = new FirstAnalysisGB()
+  val builder = new ViralityAnalysisGB()
   val graph = Raphtory.createGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
