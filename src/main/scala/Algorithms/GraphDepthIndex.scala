@@ -1,6 +1,10 @@
 package Algorithms
 
-import com.raphtory.core.algorithm.{GraphAlgorithm, GraphPerspective, Row, Table}
+//import com.raphtory.core.algorithm.{GraphAlgorithm, GraphPerspective, Row, Table}
+import com.raphtory.algorithms.api.GraphAlgorithm
+import com.raphtory.algorithms.api.GraphPerspective
+import com.raphtory.algorithms.api.Row
+import com.raphtory.algorithms.api.Table
 
 class GraphDepthIndex() extends GraphAlgorithm  {
   override def apply(graph: GraphPerspective): GraphPerspective = {

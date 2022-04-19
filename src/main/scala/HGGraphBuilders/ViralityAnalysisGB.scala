@@ -1,7 +1,11 @@
 package HGGraphBuilders
 
-import com.raphtory.core.components.graphbuilder.{GraphBuilder, Properties, ImmutableProperty}
+//import com.raphtory.core.components.graphbuilder.{GraphBuilder, Properties, ImmutableProperty}
 //import com.raphtory.core.model.graph.{ImmutableProperty, Properties, Type}
+import com.raphtory.components.graphbuilder.GraphBuilder
+import com.raphtory.components.graphbuilder.Properties.ImmutableProperty
+import com.raphtory.components.graphbuilder.Properties.Properties
+import com.raphtory.components.graphbuilder.Properties.Type
 
 class ViralityAnalysisGB extends GraphBuilder[String]{
   override def parseTuple(tuple: String): Unit = {

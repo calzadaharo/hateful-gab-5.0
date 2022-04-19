@@ -1,14 +1,18 @@
 package Algorithms
 
-import com.raphtory.core.algorithm.GraphPerspective
-
-import com.raphtory.core.algorithm.{GraphAlgorithm,Row,Table}
-import com.raphtory.core.graph.visitor.Vertex
+//import com.raphtory.core.algorithm.GraphPerspective
+//
+//import com.raphtory.core.algorithm.{GraphAlgorithm,Row,Table}
+//import com.raphtory.core.graph.visitor.Vertex
+import com.raphtory.algorithms.api.GraphAlgorithm
+import com.raphtory.algorithms.api.GraphPerspective
+import com.raphtory.algorithms.api.Row
+import com.raphtory.algorithms.api.Table
 
 class EfficientVirality  extends GraphAlgorithm {
   override def apply(graph: GraphPerspective): GraphPerspective = {
     graph
-      .step{(vertex: Vertex) => {
+      .step{(vertex) => {
         vertex.getProperty[String]("index") match {
           case Some(i) => {i match {
             case "0" => {
@@ -34,7 +38,7 @@ class EfficientVirality  extends GraphAlgorithm {
           case None => println(s"STEP ERROR ${vertex.ID()}")
         }
       }}
-      .iterate({(vertex:Vertex) =>
+      .iterate({(vertex) =>
         vertex.messageQueue[Message].foreach(_ match {
             case SendMeParent(id, index) => {
               val contribution = vertex.getState[Long]("contribution")
