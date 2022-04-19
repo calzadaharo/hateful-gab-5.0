@@ -7,7 +7,7 @@ class ViralityAnalysisGB extends GraphBuilder[String]{
   override def parseTuple(tuple: String): Unit = {
     val dataLine = tuple.split(",").map(_.trim)
 
-    println(s"Check: ${dataLine(4)}")
+//    println(s"Check: ${dataLine(4)}")
 
     val vertex = dataLine(0).toLong
     val parent = dataLine(1)
