@@ -74,8 +74,8 @@ class Virality extends GraphAlgorithm {
               if (received_index > my_index && received_index > my_sent) {
                 // Check
                 vertex.setState("sent",received_index.toInt)
-                vertex.messageVertex(received_id,
-                  (received_id, received_index, distance, parent_sum,true))
+//                vertex.messageVertex(received_id,
+//                  (received_id, received_index, distance, parent_sum,true))
                 vertex.messageAllNeighbours(received_id,received_index,distance+1,parent_sum,false)
               }
             }
