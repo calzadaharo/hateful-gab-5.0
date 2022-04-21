@@ -15,8 +15,12 @@ object Runner extends App {
 
   val source = ResourceSpout("correct-pre-virality.csv")
   val builder = new ViralityAnalysisGB()
-  val graph = Raphtory.streamGraph(spout = source, graphBuilder = builder)
+  val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
-  val queryHandler = graph.pointQuery(EfficientVirality(), outputServer, maxIndex)
+  val queryHandler = graph
+    .at(maxIndex)
+    .past()
+    .execute(EfficientVirality())
+    .writeTo(outputServer)
 }

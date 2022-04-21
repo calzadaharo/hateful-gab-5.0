@@ -39,7 +39,7 @@ class EfficientVirality  extends GraphAlgorithm {
         }
       }}
       .iterate({(vertex) =>
-        vertex.messageQueue[Message].foreach(_ match {
+        vertex.messageQueue[Message[vertex.IDType]].foreach(_ match {
             case SendMeParent(id, index) => {
               val contribution = vertex.getState[Long]("contribution")
               vertex.setState("contribution",contribution+1)
@@ -90,10 +90,10 @@ class EfficientVirality  extends GraphAlgorithm {
           vertex.getStateOrElse("sum", 0))
       })
   }
-  sealed trait Message {}
-  case class SendMeParent(vertexId: Long, index: Int)     extends Message
-  case class MyContribution(contribution: Long)           extends Message
-  case class UpdateDistance(newDistance: Int, index: Int) extends Message
+  sealed trait Message[VertexId] {}
+    case class SendMeParent[VertexId](vertexId: VertexId, index: Int) extends Message[VertexId]
+    case class MyContribution[VertexId](contribution: Long) extends Message[VertexId]
+    case class UpdateDistance[VertexId](newDistance: Int, index: Int) extends Message[VertexId]
 }
 
 object EfficientVirality {
