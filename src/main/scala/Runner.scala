@@ -1,8 +1,5 @@
 import Algorithms.{EfficientVirality, GraphDepthIndex, Virality,OrderByCascade}
 import HGGraphBuilders.{FirstAnalysisGB, ViralityAnalysisGB}
-//import com.raphtory.core.deploy.Raphtory
-//import com.raphtory.core.components.spout.instance.ResourceSpout
-//import com.raphtory.output.FileOutputFormat
 import com.raphtory.deployment.Raphtory
 import com.raphtory.output.FileOutputFormat
 import com.raphtory.spouts.ResourceSpout
