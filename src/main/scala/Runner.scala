@@ -10,10 +10,10 @@ object Runner extends App {
   val lastTimestamp: Long = 46417964
   val maxIndex = 2692
 
-  val source = ResourceSpout("part-00000-hateful_gab.csv")
+  val source = ResourceSpout("hateful-gab-no-repost.csv")
   val builder = new ViralityAnalysisGB()
   val graph = Raphtory.batchLoadGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
-  val queryHandler = graph.pointQuery(OrderByCascade(),outputServer,lastTimestampPart0)
+  val queryHandler = graph.pointQuery(OrderByCascade(),outputServer,lastTimestamp)
 }
