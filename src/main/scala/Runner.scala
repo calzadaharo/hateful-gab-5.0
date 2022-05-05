@@ -9,11 +9,17 @@ object Runner extends App {
   val lastTimestampPart0: Long = 3062658
   val lastTimestamp: Long = 46417964
   val maxIndex = 2692
+  val maxIndexNoRepost = 1687
 
-  val source = ResourceSpout("hateful-gab-no-repost.csv")
+
+  val source = ResourceSpout("no-repost-preVirality.csv")
   val builder = new NoRepostGB()
-  val graph = Raphtory.batchLoadGraph(spout = source, graphBuilder = builder)
+  val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
-  val queryHandler = graph.pointQuery(OrderByCascade(),outputServer,lastTimestamp)
+  val queryHandler = graph
+    .at(maxIndexNoRepost)
+    .past()
+    .execute(EfficientVirality())
+    .writeTo(outputServer)
 }

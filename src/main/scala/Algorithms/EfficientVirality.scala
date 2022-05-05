@@ -35,7 +35,7 @@ class EfficientVirality  extends GraphAlgorithm {
         }
       }}
       .iterate({(vertex) =>
-        vertex.messageQueue[Message[Long]].foreach(_ match {
+        vertex.messageQueue[Message[vertex.IDType]].foreach(_ match {
             case SendMeParent(id, index) => {
               val contribution = vertex.getState[Long]("contribution")
               vertex.setState("contribution",contribution+1)
