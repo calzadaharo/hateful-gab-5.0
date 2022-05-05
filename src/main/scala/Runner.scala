@@ -11,7 +11,7 @@ object Runner extends App {
   val maxIndex = 2692
 
   val source = ResourceSpout("part-00000-hateful_gab.csv")
-  val builder = new ViralityAnalysisGB()
+  val builder = new NoRepostGB()
   val graph = Raphtory.batchLoadGraph(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
