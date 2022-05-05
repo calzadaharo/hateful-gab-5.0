@@ -13,7 +13,7 @@ object Runner extends App {
 
 
   val source = ResourceSpout("no-repost-preVirality.csv")
-  val builder = new NoRepostGB()
+  val builder = new ViralityAnalysisGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
