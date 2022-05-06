@@ -12,14 +12,14 @@ object Runner extends App {
   val maxIndexNoRepost = 1687
 
 
-  val source = ResourceSpout("no-repost-preVirality.csv")
-  val builder = new ViralityAnalysisGB()
+  val source = ResourceSpout("part-00000-hateful_gab.csv")
+  val builder = new NoRepostGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
   val queryHandler = graph
-    .at(maxIndexNoRepost)
+    .at(lastTimestampPart0)
     .past()
-    .execute(EfficientVirality())
+    .execute(OrderByCascade())
     .writeTo(outputServer)
 }
