@@ -12,7 +12,7 @@ class NoRepostGB extends GraphBuilder[String]{
     val vertex = dataLine(0).toLong
     val timestamp = dataLine(1)
     val user = dataLine(2)
-    val hateful = dataLine(5)
+    val hateful = dataLine(4)
     val parent = dataLine(3).toLong
 
     if (parent == 0) {
