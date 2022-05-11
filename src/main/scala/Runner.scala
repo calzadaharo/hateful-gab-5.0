@@ -1,5 +1,5 @@
 import Algorithms.{EfficientVirality, GraphDepthIndex, OrderByCascade, Virality}
-import HGGraphBuilders.{FirstAnalysisGB, NoRepostGB, ViralityAnalysisGB}
+import HGGraphBuilders.{FirstAnalysisGB, LOTRGB, NoRepostGB, ViralityAnalysisGB}
 import com.raphtory.algorithms.generic.ConnectedComponents
 import com.raphtory.deployment.Raphtory
 import com.raphtory.output.FileOutputFormat
@@ -20,7 +20,7 @@ object Runner extends App {
   val source  = FileSpout(path)
 
 //  val source = ResourceSpout("part-00000-hateful_gab.csv")
-  val builder = new NoRepostGB()
+  val builder = new LOTRGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
