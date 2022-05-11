@@ -3,7 +3,8 @@ import HGGraphBuilders.{FirstAnalysisGB, NoRepostGB, ViralityAnalysisGB}
 import com.raphtory.algorithms.generic.ConnectedComponents
 import com.raphtory.deployment.Raphtory
 import com.raphtory.output.FileOutputFormat
-import com.raphtory.spouts.ResourceSpout
+import com.raphtory.spouts.{FileSpout, ResourceSpout}
+import com.raphtory.util.FileUtils
 
 object Runner extends App {
   val firstTest = 39316
@@ -12,8 +13,13 @@ object Runner extends App {
   val maxIndex = 2692
   val maxIndexNoRepost = 1687
 
+  // LOTR test
+  val path = "/tmp/lotr.csv"
+  val url  = "https://raw.githubusercontent.com/Raphtory/Data/main/lotr.csv"
+  FileUtils.curlFile(path, url)
+  val source  = FileSpout(path)
 
-  val source = ResourceSpout("part-00000-hateful_gab.csv")
+//  val source = ResourceSpout("part-00000-hateful_gab.csv")
   val builder = new NoRepostGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
