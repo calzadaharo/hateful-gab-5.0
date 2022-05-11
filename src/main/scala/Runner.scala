@@ -29,4 +29,7 @@ object Runner extends App {
     .past()
     .execute(ConnectedComponents())
     .writeTo(outputServer)
+
+  queryHandler.waitForJob()
+  System.exit(0)
 }
