@@ -1,5 +1,6 @@
-import Algorithms.{EfficientVirality, GraphDepthIndex, Virality,OrderByCascade}
-import HGGraphBuilders.{FirstAnalysisGB, ViralityAnalysisGB, NoRepostGB}
+import Algorithms.{EfficientVirality, GraphDepthIndex, OrderByCascade, Virality}
+import HGGraphBuilders.{FirstAnalysisGB, NoRepostGB, ViralityAnalysisGB}
+import com.raphtory.algorithms.generic.ConnectedComponents
 import com.raphtory.deployment.Raphtory
 import com.raphtory.output.FileOutputFormat
 import com.raphtory.spouts.ResourceSpout
@@ -20,6 +21,6 @@ object Runner extends App {
   val queryHandler = graph
     .at(lastTimestampPart0)
     .past()
-    .execute(OrderByCascade())
+    .execute(ConnectedComponents())
     .writeTo(outputServer)
 }
