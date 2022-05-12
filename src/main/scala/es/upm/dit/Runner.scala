@@ -5,7 +5,8 @@ import com.raphtory.deployment.Raphtory
 import com.raphtory.output.FileOutputFormat
 import com.raphtory.spouts.{FileSpout, ResourceSpout}
 import com.raphtory.util.FileUtils
-import es.upm.dit.graphbuilders.{NoRepostGB}
+import es.upm.dit.algorithms.OrderByCascade
+import es.upm.dit.graphbuilders.NoRepostGB
 
 object Runner extends App {
   val firstTest = 39316
@@ -26,7 +27,7 @@ object Runner extends App {
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
   val queryHandler = graph
-    .execute(ConnectedComponents())
+    .execute(OrderByCascade())
     .writeTo(outputServer)
 
   queryHandler.waitForJob()
