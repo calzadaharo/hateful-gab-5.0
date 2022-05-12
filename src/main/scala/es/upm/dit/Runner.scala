@@ -21,7 +21,7 @@ object Runner extends App {
 //  FileUtils.curlFile(path, url)
 //  val source = FileSpout(path)
 
-  val source = ResourceSpout("part-00000-hateful_gab.csv")
+  val source = ResourceSpout("no-repost-new-classif-pre-order.csv")
   val builder = new NoRepostGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
