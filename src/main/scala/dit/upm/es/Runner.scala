@@ -1,10 +1,11 @@
-import Algorithms.{EfficientVirality, GraphDepthIndex, OrderByCascade, Virality}
-import HGGraphBuilders.{FirstAnalysisGB, LOTRGB, NoRepostGB, ViralityAnalysisGB}
+package dit.upm.es
+
 import com.raphtory.algorithms.generic.ConnectedComponents
 import com.raphtory.deployment.Raphtory
 import com.raphtory.output.FileOutputFormat
-import com.raphtory.spouts.{FileSpout, ResourceSpout}
+import com.raphtory.spouts.FileSpout
 import com.raphtory.util.FileUtils
+import dit.upm.es.graphbuilders.LOTRGB
 
 object Runner extends App {
   val firstTest = 39316
@@ -15,11 +16,11 @@ object Runner extends App {
 
   // LOTR test
   val path = "/tmp/lotr.csv"
-  val url  = "https://raw.githubusercontent.com/Raphtory/Data/main/lotr.csv"
+  val url = "https://raw.githubusercontent.com/Raphtory/Data/main/lotr.csv"
   FileUtils.curlFile(path, url)
-  val source  = FileSpout(path)
+  val source = FileSpout(path)
 
-//  val source = ResourceSpout("part-00000-hateful_gab.csv")
+  //  val source = ResourceSpout("part-00000-hateful_gab.csv")
   val builder = new LOTRGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
