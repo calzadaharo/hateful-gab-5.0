@@ -1,4 +1,4 @@
-package dit.upm.es.graphbuilders
+package es.upm.dit.graphbuilders
 
 //import com.raphtory.core.components.graphbuilder.{GraphBuilder, Properties, ImmutableProperty, Type}
 //import com.raphtory.core.model.graph.{ImmutableProperty, Properties, Type}

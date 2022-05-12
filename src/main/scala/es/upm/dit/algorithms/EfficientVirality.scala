@@ -1,4 +1,4 @@
-package dit.upm.es.algorithms
+package es.upm.dit.algorithms
 
 import com.raphtory.algorithms.api.{GraphAlgorithm, GraphPerspective, Row, Table}
 
