@@ -81,7 +81,8 @@ class EfficientVirality  extends GraphAlgorithm {
           vertex.getPropertyOrElse("index","null"),
           vertex.getPropertyOrElse("level","null"),
           vertex.getStateOrElse("contribution", 0),
-          vertex.getStateOrElse("sum", 0))
+          vertex.getStateOrElse("sum", 0),
+          vertex.getPropertyOrElse("author","null"))
       })
   }
   sealed trait Message[VertexId] {}

@@ -16,13 +16,14 @@ class ViralityAnalysisGB extends GraphBuilder[String]{
     val index = dataLine(3).toLong
     val level = dataLine(4)
     val hateful = dataLine(5)
-//    val user = dataLine(7)
+    val user = dataLine(7)
 
       addVertex(index,vertex,Properties(
         ImmutableProperty("index",index.toString),
         ImmutableProperty("cascade",cascade),
         ImmutableProperty("level",level),
         ImmutableProperty("hateful", hateful),
+        ImmutableProperty("author", user),
       ))
       if (index != 0) {addEdge(index, vertex, parent.toLong)}
   }
