@@ -9,27 +9,23 @@ class EfficientVirality  extends GraphAlgorithm {
         vertex.getProperty[String]("index") match {
           case Some(i) => {i match {
             case "0" => {
-              println("0")
               vertex.setState("contribution",1.toLong)
               vertex.setState("sum",0.toLong)
               vertex.setState("index",1)
             }
             case "1" => {
-              println("1")
               vertex.setState("contribution",1.toLong)
               vertex.setState("sum",2.toLong)
               vertex.setState("index",1)
             }
             case "2" => {
-              println("2")
               vertex.setState("index",0)
               vertex.setState("contribution",0.toLong)
               vertex.messageOutNeighbours(SendMeParent(vertex.ID(),2))
             }
             case _ => {
-              println("Other")
               vertex.setState("index",0)
-              vertex.setState("contribution", 0.toLong)
+              vertex.setState("contribution",0.toLong)
             }
           }}
           case None => println(s"STEP ERROR ${vertex.ID()}")

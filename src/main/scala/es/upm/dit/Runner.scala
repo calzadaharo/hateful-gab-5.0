@@ -21,7 +21,7 @@ object Runner extends App {
 //  FileUtils.curlFile(path, url)
 //  val source = FileSpout(path)
 
-  val source = ResourceSpout("pre-virality-no-repost-no-classi.csv")
+  val source = ResourceSpout("pre-virality-no-repost-no-classi-corrected.csv")
   val builder = new ViralityAnalysisGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
