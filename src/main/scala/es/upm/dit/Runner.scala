@@ -5,8 +5,8 @@ import com.raphtory.deployment.Raphtory
 import com.raphtory.output.FileOutputFormat
 import com.raphtory.spouts.{FileSpout, ResourceSpout}
 import com.raphtory.util.FileUtils
-import es.upm.dit.algorithms.{OrderByCascade,EfficientVirality}
-import es.upm.dit.graphbuilders.NoRepostGB
+import es.upm.dit.algorithms.{EfficientVirality, OrderByCascade}
+import es.upm.dit.graphbuilders.{NoRepostGB, ViralityAnalysisGB}
 
 object Runner extends App {
   val firstTest = 39316
@@ -22,7 +22,7 @@ object Runner extends App {
 //  val source = FileSpout(path)
 
   val source = ResourceSpout("pre-virality-no-repost-no-classi.csv")
-  val builder = new NoRepostGB()
+  val builder = new ViralityAnalysisGB()
   val graph = Raphtory.batchLoad(spout = source, graphBuilder = builder)
   val output = FileOutputFormat("/home/rodrigo/output-5.0")
   val outputServer = FileOutputFormat("/home/rcalzada/output-5.0")
